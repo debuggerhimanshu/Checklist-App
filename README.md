@@ -35,3 +35,4 @@ A single-page HTML app that turns the module syllabus into a trackable study pla
 
 - Built as a standalone artifact inside Claude — the checklist content (topics, read/practical/memorize descriptions) is hardcoded to Module 3's syllabus, so it won't reflect changes made outside this file.
 - Storage is scoped to your account within this environment. If you move the HTML file elsewhere or open it outside Claude, it won't carry your saved progress with it.
+# Checklist-App

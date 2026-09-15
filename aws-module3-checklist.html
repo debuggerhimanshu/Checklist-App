@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Module 03 — Study Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10141B;
+    --panel: #161C25;
+    --panel-raised: #1B222D;
+    --line: #29323F;
+    --line-soft: #1F2733;
+    --text: #E9E6DC;
+    --text-dim: #8B93A2;
+    --text-faint: #5C6472;
+    --accent: #4FB8AE;
+    --accent-dim: #2F5C58;
+    --amber: #D9A54A;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+
+  body{
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+    background-color: var(--bg);
+  }
+
+  a{ color: var(--accent); }
+
+  .layout{
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 36px 24px;
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .sidebar-mark{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+
+  .sidebar h1{
+    font-size: 20px;
+    line-height: 1.3;
+    margin: 6px 0 0 0;
+    font-weight: 600;
+  }
+
+  .progress-block{
+    display:flex;
+    align-items:center;
+    gap: 16px;
+    padding-top: 4px;
+  }
+
+  .ring-wrap{ position: relative; width: 64px; height: 64px; flex-shrink:0; }
+  .ring-wrap svg{ transform: rotate(-90deg); }
+  .ring-track{ fill:none; stroke: var(--line); stroke-width: 5; }
+  .ring-fill{ fill:none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset .5s ease; }
+  .ring-num{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .progress-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .progress-label b{ color: var(--text); font-weight: 600; }
+
+  nav.catnav{
+    display:flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    gap: 2px;
+  }
+
+  .catnav a{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    gap: 8px;
+    text-decoration:none;
+    color: var(--text-dim);
+    font-size: 13px;
+    padding: 9px 4px;
+    border-radius: var(--radius);
+    transition: color .15s ease, background .15s ease;
+  }
+  .catnav a:hover{ color: var(--text); background: var(--panel-raised); }
+  .catnav a .frac{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+  .catnav a.done .frac{ color: var(--accent); }
+
+  .sidebar-foot{
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+
+  .save-indicator{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-faint);
+    display:flex;
+    align-items:center;
+    gap: 6px;
+  }
+  .save-dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .save-dot.show{ opacity: 1; }
+
+  .reset-btn{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--text-faint);
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .reset-btn:hover{ border-color: #6b4646; color: #d68a7a; }
+
+  /* ---------- MAIN ---------- */
+  main{ padding: 44px 40px 100px 40px; min-width:0; }
+
+  .hero{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-title{
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 46ch;
+    line-height: 1.55;
+  }
+  .hero-count{
+    font-family:'JetBrains Mono', monospace;
+    text-align: right;
+  }
+  .hero-count .n{
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .hero-count .n span{ color: var(--text-faint); font-size: 22px; font-weight: 400; }
+  .hero-count .l{ font-size: 10.5px; letter-spacing: 0.08em; color: var(--text-faint); margin-top: 2px; }
+
+  section.category{ margin-bottom: 44px; scroll-margin-top: 24px; }
+
+  .category-head{
+    display:flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .category-head h2{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .category-head .catfrac{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  .items{
+    position: relative;
+    padding-left: 18px;
+    border-left: 1px solid var(--line);
+  }
+
+  .item{ position: relative; padding: 0 0 26px 22px; }
+  .item:last-child{ padding-bottom: 4px; }
+
+  .item::before{
+    content:'';
+    position:absolute;
+    left: -23px;
+    top: 6px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .item.complete::before{
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .item-name{
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .checks{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .check-row{
+    display:flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 10px;
+    background: var(--panel);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .check-row:hover{ border-color: var(--line); background: var(--panel-raised); }
+
+  .box{
+    flex-shrink:0;
+    width: 15px; height: 15px;
+    margin-top: 1px;
+    border: 1px solid var(--text-faint);
+    border-radius: 2px;
+    position: relative;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .check-row.checked .box{ background: var(--accent); border-color: var(--accent); }
+  .check-row.checked .box::after{
+    content:'';
+    position:absolute;
+    left:4px; top:1px;
+    width:4px; height:8px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(40deg);
+  }
+
+  .check-text{ flex:1; min-width:0; }
+  .check-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
+    display:block;
+    margin-bottom: 3px;
+  }
+  .check-row.checked .check-tag{ color: var(--accent); }
+  .check-desc{
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+  .check-row.checked .check-desc{ color: var(--text-faint); text-decoration: line-through; text-decoration-color: var(--line); }
+
+  /* ---------- NOTES ---------- */
+  .notes-section{
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .notes-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .notes-head h2{ font-size: 16px; margin:0; font-weight:600; }
+  .notes-sub{ font-size: 12.5px; color: var(--text-faint); margin-top: 4px; }
+
+  .notes-toggle{
+    display:flex;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .notes-toggle button{
+    background: var(--panel);
+    color: var(--text-faint);
+    border: none;
+    padding: 7px 14px;
+    cursor: pointer;
+  }
+  .notes-toggle button.active{ background: var(--accent-dim); color: var(--text); }
+
+  .notes-body{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    min-height: 220px;
+  }
+
+  #notesInput{
+    width: 100%;
+    min-height: 220px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 18px;
+    resize: vertical;
+    outline: none;
+  }
+  #notesInput::placeholder{ color: var(--text-faint); }
+
+  #notesPreview{
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  #notesPreview p{ margin: 0 0 12px 0; }
+  #notesPreview code{
+    background: var(--panel-raised);
+    border: 1px solid var(--line);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12.5px;
+  }
+  #notesPreview ul{ margin: 0 0 12px 0; padding-left: 20px; }
+  #notesPreview li{ margin-bottom: 5px; }
+  #notesPreview strong{ color: var(--text); }
+  #notesPreview em{ color: var(--text-dim); }
+  #notesPreview .empty{ color: var(--text-faint); font-family:'JetBrains Mono', monospace; font-size: 12.5px; }
+
+  ::selection{ background: var(--accent-dim); color: var(--text); }
+
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: no-preference){
+    .item{ animation: rise .4s ease backwards; }
+  }
+  @keyframes rise{
+    from{ opacity: 0; transform: translateY(6px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 820px){
+    .layout{ grid-template-columns: 1fr; }
+    .sidebar{
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 20px;
+    }
+    .sidebar-foot{ margin-top: 0; border-top: none; padding-top: 0; }
+    nav.catnav{ display:none; }
+    main{ padding: 28px 20px 80px 20px; }
+    .hero{ flex-direction: column; align-items: flex-start; }
+    .hero-count{ text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-mark">MODULE 03 / AWS</div>
+      <h1>Networking, Security, Data &amp; Ops</h1>
+    </div>
+
+    <div class="progress-block">
+      <div class="ring-wrap">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-track" cx="32" cy="32" r="27"></circle>
+          <circle id="ringFill" class="ring-fill" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="169.6"></circle>
+        </svg>
+        <div class="ring-num" id="ringNum">0%</div>
+      </div>
+      <div class="progress-label">
+        <div><b id="doneCount">0</b>/<span id="totalCount">51</span> checks</div>
+        <div id="topicCount">0/17 topics done</div>
+      </div>
+    </div>
+
+    <nav class="catnav" id="catNav"></nav>
+
+    <div class="sidebar-foot">
+      <div class="save-indicator"><span class="save-dot" id="saveDot"></span><span id="saveText">not yet saved</span></div>
+      <button class="reset-btn" id="resetBtn">Reset all progress</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <div class="hero-title">
+        Read the concept, do the hands-on build, then lock it in memory. Every box you check is saved automatically — close the tab whenever, it'll be here.
+      </div>
+      <div class="hero-count">
+        <div class="n"><span id="heroDone">0</span><span>/51</span></div>
+        <div class="l">CHECKS COMPLETE</div>
+      </div>
+    </div>
+
+    <div id="categories"></div>
+
+    <div class="notes-section">
+      <div class="notes-head">
+        <div>
+          <h2>Field notes</h2>
+          <div class="notes-sub">Your own markdown — gotchas, exam traps, things to re-check. Saved as you type.</div>
+        </div>
+        <div class="notes-toggle">
+          <button id="tabEdit" class="active">Edit</button>
+          <button id="tabPreview">Preview</button>
+        </div>
+      </div>
+      <div class="notes-body">
+        <textarea id="notesInput" placeholder="e.g.&#10;- SG is stateful, NACL is stateless&#10;- ALB = L7, NLB = L4&#10;**Remember:** CloudTrail = audit, CloudWatch = metrics"></textarea>
+        <div id="notesPreview" style="display:none;"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const DATA = [
+    { id:'networking', title:'Networking & Content Delivery', items:[
+      { id:'route53', name:'Route 53',
+        read:'Routing policies — simple, weighted, latency, failover, geolocation; public vs private hosted zones',
+        practical:'Create a hosted zone, use/register a domain, point it to an EC2 or ALB',
+        memorize:'Record types (A, CNAME, Alias vs CNAME), TTL' },
+      { id:'apigw', name:'API Gateway',
+        read:'REST vs HTTP vs WebSocket API; integration types (Lambda proxy, HTTP, Mock)',
+        practical:'Build a REST API → Lambda integration → deploy a stage → test with curl/Postman',
+        memorize:'Stage/deploy flow, throttling & caching, REST vs HTTP API trade-offs' },
+      { id:'vpc', name:'VPC, Subnets, Route Tables, Security Groups, NAT Gateway',
+        read:'CIDR blocks; how routing decides public vs private subnet',
+        practical:'Build a VPC from scratch: public + private subnet, IGW, NAT gateway, route tables, EC2 in each',
+        memorize:'Security Group (stateful) vs NACL (stateless); NAT Gateway = outbound-only for private subnets' },
+    ]},
+    { id:'security', title:'Security, Identity & Compliance', items:[
+      { id:'iam', name:'IAM',
+        read:'Users, groups, roles, policies (identity vs resource-based); least privilege',
+        practical:'Create a user + group + custom JSON policy; attach a role to EC2 instead of hardcoding keys',
+        memorize:'IAM is global, not regional; explicit deny always wins in policy evaluation' },
+      { id:'acm', name:'ACM',
+        read:'What ACM does; public vs private certificates',
+        practical:'Request a public cert, validate via DNS, attach to an ALB or CloudFront',
+        memorize:'Free when used with ALB/CloudFront; cannot export public ACM private keys' },
+      { id:'kms', name:'KMS',
+        read:'Customer managed vs AWS managed keys; envelope encryption concept',
+        practical:'Create a CMK, encrypt/decrypt a small object or an S3 bucket with it',
+        memorize:'Region-specific; key rotation option; KMS = encryption keys, ACM = TLS certs' },
+    ]},
+    { id:'database', title:'Database', items:[
+      { id:'rds', name:'RDS',
+        read:'Supported engines; Multi-AZ vs Read Replica; backups/snapshots',
+        practical:'Create an RDS instance (free tier), connect from an EC2 in the same VPC',
+        memorize:'Multi-AZ = high availability (sync); Read Replica = read scaling (async)' },
+      { id:'dynamodb', name:'DynamoDB',
+        read:'Partition key vs sort key; on-demand vs provisioned capacity',
+        practical:'Create a table, add items via console, query using the partition key',
+        memorize:'NoSQL/serverless; single-digit ms latency; simple vs composite primary keys' },
+      { id:'redshift', name:'Redshift',
+        read:'OLAP/data warehousing vs OLTP use cases',
+        practical:'Not usually hands-on at this level — understand where it fits',
+        memorize:'Analytics/data warehouse; columnar storage; not for transactional workloads' },
+    ]},
+    { id:'devtools', title:'Developer Tools', items:[
+      { id:'cfn', name:'CloudFormation',
+        read:'IaC concept; template structure (Resources, Parameters, Outputs); stacks',
+        practical:'Write a small YAML/JSON template to spin up an S3 bucket or EC2; deploy as a stack',
+        memorize:'Declarative IaC; rollback-on-failure is the default behavior' },
+      { id:'beanstalk', name:'Elastic Beanstalk',
+        read:'PaaS concept — you upload code, AWS provisions the rest',
+        practical:'Deploy a simple sample app via the Beanstalk console',
+        memorize:'Manages EC2/ELB/Auto Scaling under the hood, but you still have config control' },
+      { id:'cdk', name:'AWS CDK',
+        read:'IaC using real programming languages that synthesizes to CloudFormation',
+        practical:'Optional — skim a sample CDK app in Python or TypeScript',
+        memorize:'CDK → synthesizes → a CloudFormation template; higher-level abstraction than raw CFN' },
+      { id:'codepipeline', name:'CodePipeline (CI/CD)',
+        read:'Pipeline stages — Source → Build → Deploy; integration with CodeCommit/CodeBuild/CodeDeploy',
+        practical:'If time allows, build a basic pipeline from a repo to a simple deploy target',
+        memorize:'CodePipeline = orchestrator, CodeBuild = build/test, CodeDeploy = deployment' },
+    ]},
+    { id:'management', title:'Management & Governance', items:[
+      { id:'elb', name:'ELB / Application Load Balancer',
+        read:'ALB vs NLB vs CLB; listeners, target groups',
+        practical:'Create an ALB, register 2 EC2 instances as targets, test load distribution',
+        memorize:'ALB = Layer 7 (path/host-based routing); NLB = Layer 4 (raw TCP, high performance)' },
+      { id:'asg', name:'EC2 Auto Scaling / Auto Scaling Groups',
+        read:'Launch templates; scaling policies (target tracking, step, scheduled)',
+        practical:'Create a launch template + ASG, attach to the ALB above, trigger a scale-out',
+        memorize:'Min/max/desired capacity; health check grace period; usually paired with CloudWatch alarms' },
+      { id:'cloudtrail', name:'CloudTrail',
+        read:'What it logs — API calls/account activity; management vs data events',
+        practical:'Check the CloudTrail console for recent events you generated',
+        memorize:'Audit trail — "who did what," not performance monitoring' },
+      { id:'cloudwatch', name:'CloudWatch',
+        read:'Metrics, alarms, logs, dashboards',
+        practical:'Set an alarm (e.g. EC2 CPU > 70%) and trigger it',
+        memorize:'Monitoring — "how is it performing." CloudTrail = audit, CloudWatch = metrics' },
+    ]},
+  ];
+
+  const TOTAL_ITEMS = DATA.reduce((a,c)=>a+c.items.length,0);
+  const TOTAL_CHECKS = TOTAL_ITEMS * 3;
+  const STORE_KEY = 'aws-m3-checklist-v1';
+  const TAGS = { read:'READ', practical:'PRACTICAL', memorize:'MEMORIZE' };
+
+  let state = { checks:{}, notes:'' };
+  let saveTimer = null;
+
+  function ringCircumference(){ return 2 * Math.PI * 27; }
+
+  function render(){
+    const catNav = document.getElementById('catNav');
+    const catWrap = document.getElementById('categories');
+    catNav.innerHTML = '';
+    catWrap.innerHTML = '';
+
+    let totalDone = 0;
+    let itemsComplete = 0;
+    let delay = 0;
+
+    DATA.forEach(cat => {
+      let catDone = 0;
+      const catTotal = cat.items.length * 3;
+
+      const section = document.createElement('section');
+      section.className = 'category';
+      section.id = 'cat-' + cat.id;
+
+      const head = document.createElement('div');
+      head.className = 'category-head';
+      head.innerHTML = '<h2>' + cat.title + '</h2><span class="catfrac" data-frac="' + cat.id + '"></span>';
+      section.appendChild(head);
+
+      const itemsEl = document.createElement('div');
+      itemsEl.className = 'items';
+
+      cat.items.forEach(item => {
+        const s = state.checks[item.id] || {};
+        let itemDone = 0;
+
+        const itemEl = document.createElement('div');
+        itemEl.className = 'item';
+        itemEl.style.animationDelay = (delay * 0.03) + 's';
+        delay++;
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'item-name';
+        nameEl.textContent = item.name;
+        itemEl.appendChild(nameEl);
+
+        const checksEl = document.createElement('div');
+        checksEl.className = 'checks';
+
+        ['read','practical','memorize'].forEach(kind => {
+          const checked = !!s[kind];
+          if(checked){ catDone++; totalDone++; itemDone++; }
+
+          const row = document.createElement('div');
+          row.className = 'check-row' + (checked ? ' checked' : '');
+          row.tabIndex = 0;
+          row.setAttribute('role','checkbox');
+          row.setAttribute('aria-checked', checked ? 'true' : 'false');
+          row.dataset.item = item.id;
+          row.dataset.kind = kind;
+
+          row.innerHTML =
+            '<div class="box"></div>' +
+            '<div class="check-text"><span class="check-tag">' + TAGS[kind] + '</span>' +
+            '<div class="check-desc">' + item[kind] + '</div></div>';
+
+          row.addEventListener('click', () => toggle(item.id, kind));
+          row.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(item.id, kind); }
+          });
+
+          checksEl.appendChild(row);
+        });
+
+        itemEl.appendChild(checksEl);
+        if(itemDone === 3){ itemEl.classList.add('complete'); itemsComplete++; }
+        itemsEl.appendChild(itemEl);
+      });
+
+      section.appendChild(itemsEl);
+      catWrap.appendChild(section);
+
+      const navLink = document.createElement('a');
+      navLink.href = '#cat-' + cat.id;
+      if(catDone === catTotal) navLink.classList.add('done');
+      navLink.innerHTML = '<span>' + cat.title.split(' ')[0] + (cat.title.split(' ')[1] && cat.title.split(' ')[1] !== '&' ? ' ' + cat.title.split(' ')[1] : '') + '</span><span class="frac">' + catDone + '/' + catTotal + '</span>';
+      catNav.appendChild(navLink);
+
+      const fracEl = head.querySelector('[data-frac="' + cat.id + '"]');
+      fracEl.textContent = catDone + '/' + catTotal;
+    });
+
+    const pct = Math.round((totalDone / TOTAL_CHECKS) * 100);
+    document.getElementById('doneCount').textContent = totalDone;
+    document.getElementById('totalCount').textContent = TOTAL_CHECKS;
+    document.getElementById('heroDone').textContent = totalDone;
+    document.getElementById('topicCount').textContent = itemsComplete + '/' + TOTAL_ITEMS + ' topics done';
+    document.getElementById('ringNum').textContent = pct + '%';
+
+    const circumference = ringCircumference();
+    const fill = document.getElementById('ringFill');
+    fill.setAttribute('stroke-dasharray', circumference.toFixed(1));
+    fill.setAttribute('stroke-dashoffset', (circumference * (1 - totalDone / TOTAL_CHECKS)).toFixed(1));
+  }
+
+  function toggle(itemId, kind){
+    if(!state.checks[itemId]) state.checks[itemId] = {};
+    state.checks[itemId][kind] = !state.checks[itemId][kind];
+    render();
+    queueSave();
+  }
+
+  function mdToHtml(src){
+    if(!src || !src.trim()) return '<div class="empty">Nothing here yet. Switch to Edit and jot something down.</div>';
+    const escape = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const lines = escape(src).split('\n');
+    let html = '';
+    let inList = false;
+    let para = [];
+
+    function flushPara(){
+      if(para.length){
+        html += '<p>' + para.join(' ') + '</p>';
+        para = [];
+      }
+    }
+    function inline(t){
+      return t
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    }
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if(trimmed.startsWith('- ') || trimmed.startsWith('* ')){
+        flushPara();
+        if(!inList){ html += '<ul>'; inList = true; }
+        html += '<li>' + inline(trimmed.slice(2)) + '</li>';
+      } else {
+        if(inList){ html += '</ul>'; inList = false; }
+        if(trimmed === ''){ flushPara(); }
+        else{ para.push(inline(trimmed)); }
+      }
+    });
+    if(inList) html += '</ul>';
+    flushPara();
+    return html || '<div class="empty">Nothing here yet.</div>';
+  }
+
+  function showSaving(){
+    const dot = document.getElementById('saveDot');
+    const text = document.getElementById('saveText');
+    dot.classList.add('show');
+    text.textContent = 'saving…';
+  }
+  function showSaved(ok){
+    const dot = document.getElementById('saveDot');
+    const text = document.getElementById('saveText');
+    text.textContent = ok ? ('saved ' + new Date().toLocaleTimeString()) : 'save failed — retrying next edit';
+    if(!ok) dot.classList.remove('show');
+  }
+
+  function queueSave(){
+    showSaving();
+    if(saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(doSave, 500);
+  }
+
+  async function doSave(){
+    try{
+      const res = await window.storage.set(STORE_KEY, JSON.stringify(state), false);
+      showSaved(!!res);
+    }catch(e){
+      console.error('Storage save error:', e);
+      showSaved(false);
+    }
+  }
+
+  async function loadState(){
+    try{
+      const res = await window.storage.get(STORE_KEY, false);
+      if(res && res.value){
+        const parsed = JSON.parse(res.value);
+        state.checks = parsed.checks || {};
+        state.notes = parsed.notes || '';
+      }
+    }catch(e){
+      console.log('No saved state yet (first run or fetch error):', e);
+    }
+  }
+
+  function initNotes(){
+    const input = document.getElementById('notesInput');
+    const preview = document.getElementById('notesPreview');
+    const tabEdit = document.getElementById('tabEdit');
+    const tabPreview = document.getElementById('tabPreview');
+
+    input.value = state.notes;
+
+    input.addEventListener('input', () => {
+      state.notes = input.value;
+      queueSave();
+    });
+
+    tabEdit.addEventListener('click', () => {
+      tabEdit.classList.add('active');
+      tabPreview.classList.remove('active');
+      input.style.display = 'block';
+      preview.style.display = 'none';
+    });
+    tabPreview.addEventListener('click', () => {
+      tabPreview.classList.add('active');
+      tabEdit.classList.remove('active');
+      preview.innerHTML = mdToHtml(input.value);
+      preview.style.display = 'block';
+      input.style.display = 'none';
+    });
+  }
+
+  function initReset(){
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if(confirm('Clear all checked boxes and notes? This can\\'t be undone.')){
+        state = { checks:{}, notes:'' };
+        document.getElementById('notesInput').value = '';
+        render();
+        queueSave();
+      }
+    });
+  }
+
+  (async function init(){
+    await loadState();
+    render();
+    initNotes();
+    initReset();
+  })();
+})();
+</script>
+</body>
+</html>

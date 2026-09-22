@@ -1,6 +1,6 @@
 # AWS Module 03 — Study Checklist
 
-An interactive, self-saving checklist for working through AWS Module 3: Networking, Security, Database, Developer Tools, and Management & Governance.
+An interactive, self-saving checklist for working through AWS Module 3: Networking, Security, Database, Developer Tools, 
 
 ## What it is
 
